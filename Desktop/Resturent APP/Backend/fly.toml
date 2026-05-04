@@ -1,0 +1,53 @@
+# Fly.io configuration for Lagoon Bites Backend
+app = "lagoon-bites-api"
+primary_region = "sin"  # Singapore - Change this to your preferred region
+
+[env]
+  # Environment variables for production
+  NODE_ENV = "production"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[deploy]
+  strategy = "rolling"
+  max_unavailable = 1
+
+[[services]]
+  internal_port = 5000
+  processes = ["app"]
+  protocol = "tcp"
+  
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 1024
+    soft_limit = 1000
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.tcp_checks]
+    enabled = true
+    grace_period = "10s"
+    interval = "15s"
+    timeout = "5s"
+
+# Auto-scaling configuration (optional)
+[autoscaling]
+  min_machines = 1
+  max_machines = 3
+
+# Database - Configure these as Fly secrets
+[env]
+  MONGODB_URI = ""  # Set via `flyctl secrets set MONGODB_URI=<your_uri>`
+  JWT_SECRET = ""  # Set via `flyctl secrets set JWT_SECRET=<your_secret>`
+  CLOUDINARY_CLOUD_NAME = ""  # Set via flyctl secrets
+  CLOUDINARY_API_KEY = ""
+  CLOUDINARY_API_SECRET = ""
+  STRIPE_SECRET_KEY = ""
