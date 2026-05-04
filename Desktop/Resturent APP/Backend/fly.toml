@@ -2,6 +2,7 @@ app = "foodapp-g2709a"
 primary_region = "sin"
 
 [build]
+	context = ".."
 	dockerfile = "Dockerfile"
 
 [env]
