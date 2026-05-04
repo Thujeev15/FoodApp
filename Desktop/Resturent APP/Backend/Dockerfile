@@ -11,6 +11,7 @@ COPY . .
 
 RUN mkdir -p uploads
 
+ENV PORT=5001
 EXPOSE 5001
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
